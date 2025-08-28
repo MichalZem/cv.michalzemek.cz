@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odpočítávání času</title>
+    
+    <!-- PWA Meta tagy -->
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Aplikace pro odpočítávání času s analogovým a digitálním zobrazením">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk9kcG/EjcOtdMOhdmFuw60gxI1hc3UiLAogICJzaG9ydF9uYW1lIjogIlRpbWVyIiwKICAiZGVzY3JpcHRpb24iOiAiQXBsaWthY2UgcHJvIG9kcG/EjcOtdMOhdmFuw60gxI1hc3UgcyBhbmFsb2dvdsO9bSBhIGRpZ2l0w6FsbsOtbSB6b2JyYXplbsOtbSIsCiAgInN0YXJ0X3VybCI6ICIuLyIsCiAgImRpc3BsYXkiOiAiZnVsbHNjcmVlbiIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzAwMDAwMCIsCiAgInRoZW1lX2NvbG9yIjogIiMwMDAwMDAiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlNVGt5SWlCb1pXbG5hSFE5SWpFNU1pSWdkbWxsZDBKdmVEMGlNQ0F3SURFNU1pQXhPVElpSUdacGJHdzlJaU16TXpNaVBqeGphWEpqYkdVZ1kzZzlJams0SWlCamVUMGlPVGdpSUhJOUlqRXdOaUlnWm1sc2JEMGlJM1ptTURBd01DSXZQanh3WVhSb0lHUTlJazB4TURVdU1pdzJNUzQwYURNNExtdE1ORFl0TlRncU1pMHhOeTR4TERNekxqSmhNVGt1TXl3eE9TNHhJREFnTURFdU1TMHhOaTR6SWpzK1BIQmhkR2dnWkQwaVRUZ3pMak15SURFMk1pNDBZall1TVMweExqSkJORGd1T0NrME9DNDRJREFnTURFZ016Z3VOVEVnT1M0ME9XRXhNelF1TURrZ01UTTBMakE1SURRM0xqSTRJRGdnTVRNMUxqVTNJREV4TnpFdU16TkhORFl1T1dFeE1USXVOQ3d4TVRJdU5DQXRNVE11TnpVZ05UZzVPR2M2SWpzK1BDOXpkbWMrIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfSwKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUIzYVdSMGFEMGlOVEV5SWlCb1pXbG5hSFE5SWpVeE1pSWdkbWxsZDBKdmVEMGlNQ0F3SURJMU5pQXlOVFlpSUdacGJHdzlJaU16TXpNaVBqeGphWEpqYkdVZ1kzZzlJakkxTmlJZ1kzbDlJakkxTmlJZ2NqMGlNakk0SWlCbWFXeHNQU0lqWm1Zd01EQXdJajgrUEhCaGRHZ2daRDBpVFRJek1pNDFMRGMxTGpGaE1USXVOVGt4TXk0eElETXVOemdnTFRFdU16WkJNVFl6TGpFeE5pd3hOak11TVRFMklEQWdNREVnTFRFNU16WkJOVGs0SWpzK1BIQGI2VzA0M3EyVzA0M2k0ZWo0aUwyQjhEOSIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdLAogICJvcmllbnRhdGlvbiI6ICJwb3J0cmFpdCIsCiAgImNhdGVnb3JpZXMiOiBbInByb2R1Y3Rpdml0eSIsICJ1dGlsaXRpZXMiXQp9">
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9IiMzMzMiPjxjaXJjbGUgY3g9Ijk4IiBjeT0iOTgiIHI9IjEwNiIgZmlsbD0iI2ZmMDAwMCIvPjxwYXRoIGQ9Ik0xMDUuMiw2MS40aDMuaEw0Ni01OCoyLTE3LjEsNzMuMmExOS4zLDE5LjEgMCAwMTEuMS0xNi4zIjsrPHBhdGggZD0iTTgzLjMyIDE2Mi40YzYuMS0xLjJBNDguOSw0OC44IDAgMDEgMzguNTEgOS40OWExMzQuMDkgMTM0LjA5IDQ3LjI4IDggMTM1LjU3IDExNzEuMzNINDYuOWExMTIuNCwxMTIuNC0xMy43NSA1ODk4Zzs+PC9zdmc+">
+    
+    <!-- Apple PWA meta tagy -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Timer">
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9IiMzMzMiPjxjaXJjbGUgY3g9Ijk4IiBjeT0iOTgiIHI9IjEwNiIgZmlsbD0iI2ZmMDAwMCIvPjxwYXRoIGQ9Ik0xMDUuMiw2MS40aDMuaEw0Ni01OCwyLTE3LjEsNzMuMmExOS4zLDE5LjEgMCAwMTEuMS0xNi4zIjsrPHBhdGggZD0iTTgzLjMyIDE2Mi40YzYuMS0xLjJBNDguOSw0OC44IDAgMDEgMzguNTEgOS40OWExMzQuMDkgMTM0LjA5IDQ3LjI4IDggMTM1LjU3IDExNzEuMzNINDYuOWExMTIuNCwxMTIuNC0xMy43NSA1ODk4Zzs+PC9zdmc+">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color, #000);
+            color: var(--text-color, #fff);
+            font-family: 'Arial', monospace;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .timer-container {
+            text-align: center;
+            position: relative;
+        }
+
+        .timer-display {
+            font-size: 24vw;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            user-select: none;
+            transition: color 0.5s ease;
+            line-height: 1;
+            margin: 0;
+            color: var(--text-color, #fff);
+        }
+
+        .timer-display.hidden {
+            display: none;
+        }
+
+        .timer-display.blinking {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { color: var(--text-color, #fff); }
+            51%, 100% { color: var(--blink-color, #ff0000); }
+        }
+
+        .analog-circle {
+            width: 80vw;
+            height: 80vw;
+            max-width: 80vh;
+            max-height: 80vh;
+            margin: 0 auto;
+        }
+
+        .circle-progress {
+            width: 100%;
+            height: 100%;
+        }
+
+        .circle-bg {
+            fill: #333;
+        }
+
+        .pie-slice {
+            fill: var(--circle-color, #ff0000);
+        }
+
+        .analog-circle.blinking .pie-slice {
+            animation: pieSliceBlink 1s infinite;
+        }
+
+        @keyframes pieSliceBlink {
+            0%, 50% { fill: var(--circle-color, #ff0000); }
+            51%, 100% { fill: var(--blink-color, #fff); }
+        }
+
+        .settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 80px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .controls-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .settings-btn:hover,
+        .controls-btn:hover {
+            opacity: 1;
+        }
+
+        .controls {
+            display: none;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: #333;
+            border: 2px solid #555;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background-color: #555;
+            border-color: #777;
+        }
+
+        .control-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .controls-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .settings-content {
+            background-color: #222;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid #555;
+            text-align: center;
+            min-width: 400px;
+            max-width: 90vw;
+        }
+
+        .controls-content {
+            background-color: #222;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid #555;
+            text-align: center;
+            min-width: 250px;
+        }
+
+        .controls-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .controls-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .time-inputs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .time-input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .time-input {
+            width: 60px;
+            height: 50px;
+            font-size: 1.5rem;
+            text-align: center;
+            background-color: #333;
+            border: 2px solid #555;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: #777;
+        }
+
+        .input-label {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .color-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .color-input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .color-input {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #555;
+            border-radius: 5px;
+            background: none;
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .checkbox-input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background-color: #45a049;
+        }
+
+        .cancel-btn {
+            background-color: #666;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #777;
+        }
+
+        @media (max-width: 768px) {
+            .timer-display {
+                font-size: 18vw;
+            }
+            
+            .settings-btn {
+                top: 10px;
+                right: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .controls-btn {
+                top: 10px;
+                right: 10px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="settings-btn" id="settingsBtn" title="Nastavení">⚙️</button>
+    <button class="controls-btn" id="controlsBtn" title="Ovládání">▶️</button>
+    
+    <div class="timer-container">
+        <div class="timer-display" id="timerDisplay">0:00:00</div>
+        <div class="analog-circle" id="analogCircle" style="display: none;">
+            <svg class="circle-progress" viewBox="0 0 200 200">
+                <circle class="circle-bg" cx="100" cy="100" r="95"></circle>
+                <path class="pie-slice" id="pieSlice" d=""></path>
+            </svg>
+        </div>
+        <div class="controls">
+            <button class="control-btn" id="startBtn">Spustit</button>
+            <button class="control-btn" id="pauseBtn" disabled>Pozastavit</button>
+            <button class="control-btn" id="resetBtn">Reset</button>
+        </div>
+    </div>
+
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <h2 class="settings-title">Nastavení</h2>
+            
+            <h3 style="color: #fff; margin-bottom: 1rem;">Čas odpočtu</h3>
+            <div class="time-inputs">
+                <div class="time-input-group">
+                    <input type="number" class="time-input" id="hoursInput" min="0" max="9" value="0">
+                    <label class="input-label">Hodiny</label>
+                </div>
+                <div class="time-input-group">
+                    <input type="number" class="time-input" id="minutesInput" min="0" max="59" value="5">
+                    <label class="input-label">Minuty</label>
+                </div>
+                <div class="time-input-group">
+                    <input type="number" class="time-input" id="secondsInput" min="0" max="59" value="0">
+                    <label class="input-label">Sekundy</label>
+                </div>
+            </div>
+            
+            <h3 style="color: #fff; margin-bottom: 1rem;">Barvy</h3>
+            <div class="color-inputs">
+                <div class="color-input-group">
+                    <input type="color" class="color-input" id="textColorInput" value="#ffffff">
+                    <label class="input-label">Barva textu</label>
+                </div>
+                <div class="color-input-group">
+                    <input type="color" class="color-input" id="blinkColorInput" value="#000000">
+                    <label class="input-label">Barva blikání</label>
+                </div>
+                <div class="color-input-group">
+                    <input type="color" class="color-input" id="bgColorInput" value="#000000">
+                    <label class="input-label">Barva pozadí</label>
+                </div>
+                <div class="color-input-group">
+                    <input type="color" class="color-input" id="circleColorInput" value="#ff0000">
+                    <label class="input-label">Barva kruhu</label>
+                </div>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" class="checkbox-input" id="analogModeInput">
+                <label class="checkbox-label" for="analogModeInput">Použít analogový kruh</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" class="checkbox-input" id="fullscreenModeInput" checked>
+                <label class="checkbox-label" for="fullscreenModeInput">Celá obrazovka při spuštění</label>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn save-btn" id="saveBtn">Uložit</button>
+                <button class="modal-btn cancel-btn" id="cancelBtn">Zrušit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-modal" id="controlsModal">
+        <div class="controls-content">
+            <h2 class="controls-title">Ovládání</h2>
+            <div class="controls-buttons">
+                <button class="control-btn" id="startBtnModal">Spustit</button>
+                <button class="control-btn" id="pauseBtnModal">Pozastavit</button>
+                <button class="control-btn" id="resetBtnModal">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CountdownTimer {
+            constructor() {
+                this.totalSeconds = 300; // 5 minut jako výchozí
+                this.remainingSeconds = this.totalSeconds;
+                this.isRunning = false;
+                this.isPaused = false;
+                this.intervalId = null;
+                this.isBlinking = false;
+                this.analogMode = false;
+                this.fullscreenMode = true; // výchozí zapnuto
+                this.wakeLock = null; // pro prevenci vypnutí displeje
+                
+                // Barvy
+                this.textColor = '#ffffff';
+                this.blinkColor = '#000000'; // černá jako výchozí
+                this.bgColor = '#000000';
+                this.circleColor = '#ff0000';
+                
+                this.timerDisplay = document.getElementById('timerDisplay');
+                this.analogCircle = document.getElementById('analogCircle');
+                this.pieSlice = document.getElementById('pieSlice');
+                this.startBtn = document.getElementById('startBtnModal');
+                this.pauseBtn = document.getElementById('pauseBtnModal');
+                this.resetBtn = document.getElementById('resetBtnModal');
+                this.settingsBtn = document.getElementById('settingsBtn');
+                this.controlsBtn = document.getElementById('controlsBtn');
+                this.settingsModal = document.getElementById('settingsModal');
+                this.controlsModal = document.getElementById('controlsModal');
+                this.hoursInput = document.getElementById('hoursInput');
+                this.minutesInput = document.getElementById('minutesInput');
+                this.secondsInput = document.getElementById('secondsInput');
+                this.textColorInput = document.getElementById('textColorInput');
+                this.blinkColorInput = document.getElementById('blinkColorInput');
+                this.bgColorInput = document.getElementById('bgColorInput');
+                this.circleColorInput = document.getElementById('circleColorInput');
+                this.analogModeInput = document.getElementById('analogModeInput');
+                this.fullscreenModeInput = document.getElementById('fullscreenModeInput');
+                this.saveBtn = document.getElementById('saveBtn');
+                this.cancelBtn = document.getElementById('cancelBtn');
+                
+                this.bindEvents();
+                this.initCircle();
+                this.switchDisplayMode();
+                this.updateDisplay();
+                
+                // Aktivovat wake lock hned při načtení aplikace
+                this.requestWakeLock();
+                
+                // Uvolnit wake lock při opuštění stránky
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        this.releaseWakeLock();
+                    } else {
+                        // Znovu aktivovat když se vrátíme na stránku
+                        this.requestWakeLock();
+                    }
+                });
+                
+                window.addEventListener('beforeunload', () => {
+                    this.releaseWakeLock();
+                });
+            }
+            
+            initCircle() {
+                this.updateColors();
+                this.updateCircle(); // Nastavit počáteční výseč
+            }
+            
+            updateColors() {
+                document.documentElement.style.setProperty('--text-color', this.textColor);
+                document.documentElement.style.setProperty('--blink-color', this.blinkColor);
+                document.documentElement.style.setProperty('--bg-color', this.bgColor);
+                document.documentElement.style.setProperty('--circle-color', this.circleColor);
+            }
+            
+            updateCircle() {
+                if (!this.analogMode) return;
+                
+                const progress = this.remainingSeconds / this.totalSeconds;
+                
+                // Pro plný kruh (na začátku nebo pro blikání) použij jednoduchou kružnici
+                if (progress >= 1 || this.remainingSeconds <= 0) {
+                    const centerX = 100;
+                    const centerY = 100;
+                    const radius = 95;
+                    
+                    // Plný kruh - jednoduchý způsob přes dvě půlkružnice
+                    const pathData = `M ${centerX},${centerY - radius} A ${radius},${radius} 0 0,0 ${centerX},${centerY + radius} A ${radius},${radius} 0 0,0 ${centerX},${centerY - radius} Z`;
+                    this.pieSlice.setAttribute('d', pathData);
+                    return;
+                }
+                
+                const angle = progress * 360; // Úhel ve stupních
+                
+                if (angle <= 0) {
+                    // Žádná výseč
+                    this.pieSlice.setAttribute('d', '');
+                    return;
+                }
+                
+                const centerX = 100;
+                const centerY = 100;
+                const radius = 95;
+                
+                // Začínáme od 12 hodin (-90°) a jdeme PROTI směru hodinových ručiček
+                const startAngle = -90; // 12 hodin pozice
+                const endAngle = startAngle - angle; // MINUS pro opačný směr
+                
+                const startAngleRad = (startAngle * Math.PI) / 180;
+                const endAngleRad = (endAngle * Math.PI) / 180;
+                
+                const startX = centerX + radius * Math.cos(startAngleRad);
+                const startY = centerY + radius * Math.sin(startAngleRad);
+                const endX = centerX + radius * Math.cos(endAngleRad);
+                const endY = centerY + radius * Math.sin(endAngleRad);
+                
+                const largeArcFlag = angle > 180 ? 1 : 0;
+                
+                // Změnit směr arc na 0 (counterclockwise) místo 1 (clockwise)
+                const pathData = [
+                    `M ${centerX},${centerY}`, // Move to center
+                    `L ${startX},${startY}`,   // Line to start point
+                    `A ${radius},${radius} 0 ${largeArcFlag},0 ${endX},${endY}`, // Arc counterclockwise
+                    'Z' // Close path
+                ].join(' ');
+                
+                this.pieSlice.setAttribute('d', pathData);
+            }
+            
+            bindEvents() {
+                this.startBtn.addEventListener('click', () => {this.start(); this.closeControls();});
+                this.pauseBtn.addEventListener('click', () => {this.pause(); this.closeControls();});
+                this.resetBtn.addEventListener('click', () => {this.reset(); this.closeControls();});
+                this.settingsBtn.addEventListener('click', (e) => {e.stopPropagation(); this.openSettings();});
+                this.controlsBtn.addEventListener('click', (e) => {e.stopPropagation(); this.openControls();});
+                this.saveBtn.addEventListener('click', () => this.saveSettings());
+                this.cancelBtn.addEventListener('click', () => this.closeSettings());
+                
+                // Kliknutí kamkoliv otevře ovládací prvky (i když timer běží)
+                document.addEventListener('click', (e) => {
+                    // Neklikl na nastavení modal nebo jeho obsah
+                    if (!this.settingsModal.contains(e.target) && !this.controlsModal.contains(e.target)) {
+                        this.openControls();
+                    }
+                });
+                
+                // Zavření modalů kliknutím mimo ně
+                this.settingsModal.addEventListener('click', (e) => {
+                    if (e.target === this.settingsModal) {
+                        this.closeSettings();
+                    }
+                });
+                
+                this.controlsModal.addEventListener('click', (e) => {
+                    if (e.target === this.controlsModal) {
+                        this.closeControls();
+                    }
+                });
+            }
+            
+            start() {
+                if (this.remainingSeconds <= 0) {
+                    return;
+                }
+                
+                // Aktivovat celou obrazovku při spuštění
+                this.enterFullscreen();
+                
+                // Skrýt ovládací tlačítka
+                this.hideControls();
+                
+                this.isRunning = true;
+                this.isPaused = false;
+                this.stopBlinking();
+                
+                this.intervalId = setInterval(() => {
+                    this.remainingSeconds--;
+                    this.updateDisplay();
+                    
+                    if (this.remainingSeconds <= 0) {
+                        this.complete();
+                    }
+                }, 1000);
+                
+                this.updateButtons();
+            }
+            
+            pause() {
+                this.isRunning = false;
+                this.isPaused = true;
+                
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                
+                // Zobrazit ovládací tlačítka
+                this.showControls();
+                
+                this.updateButtons();
+            }
+            
+            reset() {
+                this.isRunning = false;
+                this.isPaused = false;
+                this.remainingSeconds = this.totalSeconds;
+                
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                
+                // Ukončit celou obrazovku při resetování
+                if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                    this.exitFullscreen();
+                }
+                
+                // Zobrazit ovládací tlačítka
+                this.showControls();
+                
+                this.stopBlinking();
+                this.updateDisplay();
+                this.updateButtons();
+                
+                // Reset výseče na plnou
+                this.updateCircle();
+            }
+            
+            complete() {
+                this.isRunning = false;
+                this.remainingSeconds = 0;
+                
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                
+                // Zobrazit ovládací tlačítka
+                this.showControls();
+                
+                this.startBlinking();
+                this.updateButtons();
+            }
+            
+            startBlinking() {
+                this.isBlinking = true;
+                this.timerDisplay.classList.add('blinking');
+                this.analogCircle.classList.add('blinking');
+            }
+            
+            stopBlinking() {
+                this.isBlinking = false;
+                this.timerDisplay.classList.remove('blinking');
+                this.analogCircle.classList.remove('blinking');
+            }
+            
+            updateDisplay() {
+                const hours = Math.floor(this.remainingSeconds / 3600);
+                const minutes = Math.floor((this.remainingSeconds % 3600) / 60);
+                const seconds = this.remainingSeconds % 60;
+                
+                const timeString = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                this.timerDisplay.textContent = timeString;
+                
+                this.updateCircle();
+            }
+            
+            updateButtons() {
+                this.startBtn.disabled = this.isRunning || this.remainingSeconds <= 0;
+                this.pauseBtn.disabled = !this.isRunning;
+                this.resetBtn.disabled = false;
+            }
+            
+            openSettings() {
+                if (this.isRunning) return; // Nelze měnit nastavení během běhu
+                
+                // Naplnit současné hodnoty času
+                const hours = Math.floor(this.totalSeconds / 3600);
+                const minutes = Math.floor((this.totalSeconds % 3600) / 60);
+                const seconds = this.totalSeconds % 60;
+                
+                this.hoursInput.value = hours;
+                this.minutesInput.value = minutes;
+                this.secondsInput.value = seconds;
+                
+                // Naplnit současné hodnoty barev
+                this.textColorInput.value = this.textColor;
+                this.blinkColorInput.value = this.blinkColor;
+                this.bgColorInput.value = this.bgColor;
+                this.circleColorInput.value = this.circleColor;
+                this.analogModeInput.checked = this.analogMode;
+                this.fullscreenModeInput.checked = this.fullscreenMode;
+                
+                this.settingsModal.style.display = 'flex';
+            }
+            
+            closeSettings() {
+                this.settingsModal.style.display = 'none';
+            }
+            
+            openControls() {
+                this.controlsModal.style.display = 'flex';
+            }
+            
+            closeControls() {
+                this.controlsModal.style.display = 'none';
+            }
+            
+            saveSettings() {
+                const hours = parseInt(this.hoursInput.value) || 0;
+                const minutes = parseInt(this.minutesInput.value) || 0;
+                const seconds = parseInt(this.secondsInput.value) || 0;
+                
+                // Validace času
+                if (hours < 0 || hours > 9) {
+                    alert('Hodiny musí být mezi 0-9');
+                    return;
+                }
+                if (minutes < 0 || minutes > 59) {
+                    alert('Minuty musí být mezi 0-59');
+                    return;
+                }
+                if (seconds < 0 || seconds > 59) {
+                    alert('Sekundy musí být mezi 0-59');
+                    return;
+                }
+                
+                this.totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+                
+                if (this.totalSeconds <= 0) {
+                    alert('Celkový čas musí být větší než 0');
+                    return;
+                }
+                
+                // Uložit barvy
+                this.textColor = this.textColorInput.value;
+                this.blinkColor = this.blinkColorInput.value;
+                this.bgColor = this.bgColorInput.value;
+                this.circleColor = this.circleColorInput.value;
+                this.analogMode = this.analogModeInput.checked;
+                this.fullscreenMode = this.fullscreenModeInput.checked;
+                
+                // Aplikovat změny
+                this.updateColors();
+                this.switchDisplayMode();
+                
+                this.remainingSeconds = this.totalSeconds;
+                this.stopBlinking();
+                this.updateDisplay();
+                this.updateButtons();
+                this.closeSettings();
+            }
+            
+            switchDisplayMode() {
+                if (this.analogMode) {
+                    this.timerDisplay.style.display = 'none';
+                    this.analogCircle.style.display = 'block';
+                } else {
+                    this.timerDisplay.style.display = 'block';
+                    this.analogCircle.style.display = 'none';
+                }
+            }
+            
+            enterFullscreen() {
+                if (this.fullscreenMode && document.documentElement.requestFullscreen) {
+                    try {
+                        document.documentElement.requestFullscreen().catch(err => {
+                            console.log('Nepodařilo se aktivovat celou obrazovku:', err);
+                        });
+                    } catch (err) {
+                        console.log('Fullscreen není podporován');
+                    }
+                } else if (this.fullscreenMode && document.documentElement.webkitRequestFullscreen) {
+                    // Safari support
+                    try {
+                        document.documentElement.webkitRequestFullscreen();
+                    } catch (err) {
+                        console.log('Webkit fullscreen selhalo');
+                    }
+                } else if (this.fullscreenMode && document.documentElement.msRequestFullscreen) {
+                    // IE/Edge support
+                    try {
+                        document.documentElement.msRequestFullscreen();
+                    } catch (err) {
+                        console.log('MS fullscreen selhalo');
+                    }
+                }
+            }
+            
+            exitFullscreen() {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(err => {
+                        console.log('Nepodařilo se ukončit celou obrazovku:', err);
+                    });
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+            
+            async requestWakeLock() {
+                if ('wakeLock' in navigator) {
+                    try {
+                        this.wakeLock = await navigator.wakeLock.request('screen');
+                        console.log('✅ Wake Lock aktivován - displej se nevypne');
+                        
+                        this.wakeLock.addEventListener('release', () => {
+                            console.log('Wake Lock byl uvolněn');
+                        });
+                    } catch (err) {
+                        console.log('❌ Nepodařilo se aktivovat Wake Lock:', err);
+                    }
+                } else {
+                    console.log('⚠️ Wake Lock API není podporován v tomto prohlížeči');
+                }
+            }
+            
+            releaseWakeLock() {
+                if (this.wakeLock) {
+                    this.wakeLock.release()
+                        .then(() => {
+                            console.log('✅ Wake Lock uvolněn');
+                            this.wakeLock = null;
+                        })
+                        .catch(err => {
+                            console.log('❌ Chyba při uvolnění Wake Lock:', err);
+                        });
+                }
+            }
+            
+            hideControls() {
+                this.settingsBtn.style.display = 'none';
+                this.controlsBtn.style.display = 'none';
+            }
+            
+            showControls() {
+                this.settingsBtn.style.display = 'block';
+                this.controlsBtn.style.display = 'block';
+            }
+        }
+        
+        // Inicializace aplikace
+        document.addEventListener('DOMContentLoaded', () => {
+            new CountdownTimer();
+            
+            // Registrace Service Worker pro PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('data:application/javascript;base64,Ly8gU2VydmljZSBXb3JrZXIgcHJvIFBXQQpjb25zdCBDQUNIRV9OQU1FID0gJ3RpbWVyLWFwcC12MSc7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2luc3RhbGwnLCAoZXZlbnQpID0+IHsKICBjb25zb2xlLmxvZygnU2VydmljZSBXb3JrZXIgaW5zdGFsbGVkJyk7CiAgLy8gUHJlLWNhY2hlIHJlc291cmNlcwogIHNlbGYuc2tpcFdhaXRpbmcoKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2FjdGl2YXRlJywgKGV2ZW50KSA9PiB7CiAgY29uc29sZS5sb2coJ1NlcnZpY2UgV29ya2VyIGFjdGl2YXRlZCcpOwogIC8vIENsZWFuIHVwIG9sZCBjYWNoZXMKICBldmVudC53YWl0VW50aWwoCiAgICBjYWNoZXMua2V5cygpLnRoZW4oKGNhY2hlTmFtZXMpID0+IHsKICAgICAgcmV0dXJuIFByb21pc2UuYWxsKAogICAgICAgIGNhY2hlTmFtZXMubWFwKChjYWNoZU5hbWUpID0+IHsKICAgICAgICAgIGlmIChjYWNoZU5hbWUgIT09IENBQ0hFX05BTUUpIHsKICAgICAgICAgICAgY29uc29sZS5sb2coJ0RlbGV0aW5nIG9sZCBjYWNoZTonLCBjYWNoZU5hbWUpOwogICAgICAgICAgICByZXR1cm4gY2FjaGVzLmRlbGV0ZShjYWNoZU5hbWUpOwogICAgICAgICAgfQogICAgICAgIH0pCiAgICAgICk7CiAgICB9KQogICk7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdmZXRjaCcsIChldmVudCkgPT4gewogIC8vIFJldHVybiBjYWNoZWQgcmVzcG9uc2UgZm9yIG9mZmxpbmUgZnVuY3Rpb25hbGl0eQogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKGV2ZW50LnJlcXVlc3QpLnRoZW4oKHJlc3BvbnNlKSA9PiB7CiAgICAgIC8vIFJldHVybiBjYWNoZWQgdmVyc2lvbiBvciBmZXRjaCBmcm9tIG5ldHdvcmsKICAgICAgcmV0dXJuIHJlc3BvbnNlIHx8IGZldGNoKGV2ZW50LnJlcXVlc3QpLnRoZW4oKGZldGNoUmVzcG9uc2UpID0+IHsKICAgICAgICAvLyBDYWNoZSB0aGUgbmV3IHJlc3BvbnNlIGZvciBmdXR1cmUgdXNlCiAgICAgICAgY29uc3QgcmVzcG9uc2VDbG9uZSA9IGZldGNoUmVzcG9uc2UuY2xvbmUoKTsKICAgICAgICBjYWNoZXMub3BlbihDQUNIRV9OQU1FKS50aGVuKChjYWNoZSkgPT4gewogICAgICAgICAgY2FjaGUucHV0KGV2ZW50LnJlcXVlc3QsIHJlc3BvbnNlQ2xvbmUpOwogICAgICAgIH0pOwogICAgICAgIHJldHVybiBmZXRjaFJlc3BvbnNlOwogICAgICB9KS5jYXRjaCgoKSA9PiB7CiAgICAgICAgLy8gSWYgbmV0d29yayBmYWlscywgcmV0dXJuIGEgYmFzaWMgb2ZmbGluZSBwYWdlCiAgICAgICAgcmV0dXJuIG5ldyBSZXNwb25zZSgnPGgxPkFwbGlrYWNlIGZ1bmd1amUgb2ZmbGluZTwvaDE+PHA+VHXhqmdlIDxzdHJvbmc+VGltZXI8L3N0cm9uZz4gZnVuZ3VqZSBpIGJleiBpbnRlcm5ldHUhPC9wPicsIHsKICAgICAgICAgIGhlYWRlcnM6IHsnQ29udGVudC1UeXBlJzogJ3RleHQvaHRtbCd9CiAgICAgICAgfSk7CiAgICAgIH0pOwogICAgfSkKICApOwp9KTs=')
+                    .then((registration) => {
+                        console.log('Service Worker registrován:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Chyba při registraci Service Worker:', error);
+                    });
+            }
+            
+            // Zobrazení možnosti instalace PWA
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Můžete zde přidat tlačítko pro instalaci
+                console.log('Aplikaci lze nainstalovat jako PWA');
+            });
+            
+            window.addEventListener('appinstalled', () => {
+                console.log('PWA byla nainstalována');
+                deferredPrompt = null;
+            });
+        });
+    </script>
+</body>
+</html>
