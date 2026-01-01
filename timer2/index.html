@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .timer-wrapper {
+            width: 100vh;
+            max-width: 100vw;
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+
+        .timer-circle {
+            width: 100%;
+            height: 100%;
+        }
+
+        .circle-bg {
+            fill: #333;
+        }
+
+        .pie-slice {
+            fill: #ff0000;
+        }
+
+        .timer-text {
+            fill: #fff;
+            font-size: 24px;
+            font-family: 'Courier New', monospace;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            user-select: none;
+            transition: font-size 0.3s;
+        }
+
+        .timer-text.blink-countdown {
+            font-size: 40px;
+        }
+
+        .round-text {
+            fill: #aaa;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            user-select: none;
+        }
+
+        .hide-text .timer-text,
+        .hide-text .round-text {
+            display: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #222;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            color: #fff;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ff0000;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .time-input-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-input-wrapper label {
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        .modal-content input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background: #333;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .modal-content input[type="number"]:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-start {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .btn-cancel {
+            background: #666;
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            .modal-content {
+                padding: 20px;
+            }
+
+            .timer-text {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Timer Display -->
+    <div class="timer-wrapper" id="timerWrapper">
+        <svg class="timer-circle" viewBox="0 0 200 200">
+            <circle class="circle-bg" cx="100" cy="100" r="95" />
+            <path class="pie-slice" id="pieSlice" d="" />
+            <text class="timer-text" id="timerText" x="100" y="100">0:00:00</text>
+            <text class="round-text" id="roundText" x="100" y="120"></text>
+        </svg>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-content">
+            <h2>Nastavení Timeru</h2>
+
+            <div class="input-group">
+                <label>Čas odpočítávání:</label>
+                <div class="time-inputs">
+                    <div class="time-input-wrapper">
+                        <label>Hodiny</label>
+                        <input type="number" id="hoursInput" min="0" max="23" value="0">
+                    </div>
+                    <div class="time-input-wrapper">
+                        <label>Minuty</label>
+                        <input type="number" id="minutesInput" min="0" max="59" value="1">
+                    </div>
+                    <div class="time-input-wrapper">
+                        <label>Sekundy</label>
+                        <input type="number" id="secondsInput" min="0" max="59" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Počet opakování:</label>
+                <input type="number" id="repetitionsInput" min="1" max="999" value="1">
+            </div>
+
+            <div class="input-group">
+                <label>Délka zvuku (sekundy):</label>
+                <input type="number" id="soundDurationInput" min="1" max="30" value="5">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="soundCheckbox" checked>
+                <label for="soundCheckbox">Přehrát zvuk při ukončení kola</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="hideTextCheckbox">
+                <label for="hideTextCheckbox">Nezobrazovat čísla (jen kruh)</label>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="fullscreenCheckbox">
+                <label for="fullscreenCheckbox">Celá obrazovka</label>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-cancel" id="cancelBtn">Zrušit</button>
+                <button class="btn btn-start" id="startBtn">Start</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CountdownTimer {
+            constructor() {
+                // Timer state
+                this.totalSeconds = 0;
+                this.remainingSeconds = 0;
+                this.isRunning = false;
+                this.isPaused = false;
+                this.currentRepetition = 0;
+                this.totalRepetitions = 1;
+                this.soundEnabled = true;
+                this.soundDuration = 5;
+                this.hideText = false;
+                this.fullscreenEnabled = false;
+                this.intervalId = null;
+                this.blinkIntervalId = null;
+                this.blinkCountdownId = null;
+                this.audioContext = null;
+                this.activeOscillators = [];
+                this.wakeLock = null;
+
+                // DOM elements
+                this.timerWrapper = document.getElementById('timerWrapper');
+                this.pieSlice = document.getElementById('pieSlice');
+                this.timerText = document.getElementById('timerText');
+                this.roundText = document.getElementById('roundText');
+                this.modal = document.getElementById('settingsModal');
+                this.hoursInput = document.getElementById('hoursInput');
+                this.minutesInput = document.getElementById('minutesInput');
+                this.secondsInput = document.getElementById('secondsInput');
+                this.repetitionsInput = document.getElementById('repetitionsInput');
+                this.soundDurationInput = document.getElementById('soundDurationInput');
+                this.soundCheckbox = document.getElementById('soundCheckbox');
+                this.hideTextCheckbox = document.getElementById('hideTextCheckbox');
+                this.fullscreenCheckbox = document.getElementById('fullscreenCheckbox');
+                this.startBtn = document.getElementById('startBtn');
+                this.cancelBtn = document.getElementById('cancelBtn');
+
+                this.bindEvents();
+                this.updateDisplay();
+                this.updatePieChart();
+                this.setupWakeLock();
+            }
+
+            setupWakeLock() {
+                // Re-acquire wake lock when page becomes visible again
+                document.addEventListener('visibilitychange', async () => {
+                    if (!document.hidden && this.isRunning) {
+                        await this.requestWakeLock();
+                    }
+                });
+            }
+
+            async requestWakeLock() {
+                try {
+                    if ('wakeLock' in navigator) {
+                        this.wakeLock = await navigator.wakeLock.request('screen');
+                        console.log('Wake Lock aktivní');
+
+                        this.wakeLock.addEventListener('release', () => {
+                            console.log('Wake Lock uvolněn');
+                        });
+                    }
+                } catch (err) {
+                    console.error('Wake Lock nelze aktivovat:', err);
+                }
+            }
+
+            async releaseWakeLock() {
+                if (this.wakeLock !== null) {
+                    try {
+                        await this.wakeLock.release();
+                        this.wakeLock = null;
+                    } catch (err) {
+                        console.error('Chyba při uvolnění Wake Lock:', err);
+                    }
+                }
+            }
+
+            async enterFullscreen() {
+                if (!this.fullscreenEnabled) return;
+
+                try {
+                    if (document.documentElement.requestFullscreen) {
+                        await document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) {
+                        await document.documentElement.webkitRequestFullscreen();
+                    } else if (document.documentElement.mozRequestFullScreen) {
+                        await document.documentElement.mozRequestFullScreen();
+                    } else if (document.documentElement.msRequestFullscreen) {
+                        await document.documentElement.msRequestFullscreen();
+                    }
+                    console.log('Fullscreen aktivován');
+                } catch (err) {
+                    console.error('Fullscreen nelze aktivovat:', err);
+                }
+            }
+
+            async exitFullscreen() {
+                try {
+                    if (document.fullscreenElement || document.webkitFullscreenElement ||
+                        document.mozFullScreenElement || document.msFullscreenElement) {
+                        if (document.exitFullscreen) {
+                            await document.exitFullscreen();
+                        } else if (document.webkitExitFullscreen) {
+                            await document.webkitExitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            await document.mozCancelFullScreen();
+                        } else if (document.msExitFullscreen) {
+                            await document.msExitFullscreen();
+                        }
+                        console.log('Fullscreen ukončen');
+                    }
+                } catch (err) {
+                    console.error('Chyba při ukončení fullscreen:', err);
+                }
+            }
+
+            bindEvents() {
+                // Click circle to open settings (always - will pause if running)
+                this.timerWrapper.addEventListener('click', () => {
+                    this.openSettings();
+                });
+
+                // Modal buttons
+                this.startBtn.addEventListener('click', () => this.saveSettingsAndStart());
+                this.cancelBtn.addEventListener('click', () => this.handleCancel());
+
+                // Close modal on background click
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) {
+                        this.handleCancel();
+                    }
+                });
+
+                // Enter key to start
+                this.modal.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveSettingsAndStart();
+                    }
+                });
+            }
+
+            async openSettings() {
+                // Exit fullscreen when opening settings
+                await this.exitFullscreen();
+
+                // Stop blinking and sound if active (before pausing timer)
+                this.stopBlinking();
+
+                // Pause timer if running
+                if (this.isRunning) {
+                    this.pause();
+                }
+
+                // Populate current values
+                let hours, minutes, seconds;
+
+                if (this.isPaused) {
+                    // Show remaining time when paused
+                    hours = Math.floor(this.remainingSeconds / 3600);
+                    minutes = Math.floor((this.remainingSeconds % 3600) / 60);
+                    seconds = this.remainingSeconds % 60;
+                    this.startBtn.textContent = 'Start / Pokračovat';
+                    this.cancelBtn.textContent = 'Zavřít a pokračovat';
+                } else {
+                    // Show total time when starting new
+                    hours = Math.floor(this.totalSeconds / 3600);
+                    minutes = Math.floor((this.totalSeconds % 3600) / 60);
+                    seconds = this.totalSeconds % 60;
+                    this.startBtn.textContent = 'Start';
+                    this.cancelBtn.textContent = 'Zrušit';
+                }
+
+                this.hoursInput.value = hours;
+                this.minutesInput.value = minutes;
+                this.secondsInput.value = seconds;
+                this.repetitionsInput.value = this.totalRepetitions;
+                this.soundDurationInput.value = this.soundDuration;
+                this.soundCheckbox.checked = this.soundEnabled;
+                this.hideTextCheckbox.checked = this.hideText;
+                this.fullscreenCheckbox.checked = this.fullscreenEnabled;
+
+                this.modal.classList.add('show');
+                this.hoursInput.focus();
+            }
+
+            closeSettings() {
+                this.modal.classList.remove('show');
+            }
+
+            async handleCancel() {
+                if (this.isPaused) {
+                    // Resume the timer
+                    this.closeSettings();
+                    // Re-enter fullscreen if enabled before resuming
+                    await this.enterFullscreen();
+                    this.resume();
+                } else {
+                    // Just close
+                    this.closeSettings();
+                }
+            }
+
+            async pause() {
+                if (this.isRunning) {
+                    clearInterval(this.intervalId);
+                    this.isRunning = false;
+                    this.isPaused = true;
+                    this.timerWrapper.classList.remove('running');
+
+                    // Release wake lock when paused
+                    await this.releaseWakeLock();
+                }
+                // Also stop blinking if active
+                this.stopBlinking();
+            }
+
+            resume() {
+                if (this.isPaused) {
+                    this.isPaused = false;
+                    this.start();
+                }
+            }
+
+            saveSettingsAndStart() {
+                const hours = parseInt(this.hoursInput.value) || 0;
+                const minutes = parseInt(this.minutesInput.value) || 0;
+                const seconds = parseInt(this.secondsInput.value) || 0;
+                const newTotalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+                if (newTotalSeconds <= 0) {
+                    alert('Celkový čas musí být větší než 0!');
+                    return;
+                }
+
+                // Update settings
+                this.totalRepetitions = parseInt(this.repetitionsInput.value) || 1;
+                this.soundDuration = parseInt(this.soundDurationInput.value) || 5;
+                this.soundEnabled = this.soundCheckbox.checked;
+                this.hideText = this.hideTextCheckbox.checked;
+                this.fullscreenEnabled = this.fullscreenCheckbox.checked;
+
+                // Apply or remove hide-text class
+                if (this.hideText) {
+                    this.timerWrapper.classList.add('hide-text');
+                } else {
+                    this.timerWrapper.classList.remove('hide-text');
+                }
+
+                if (this.isPaused) {
+                    // Check if user changed the time
+                    const currentInputSeconds = newTotalSeconds;
+                    const pausedTime = this.remainingSeconds;
+
+                    // If time was changed, restart with new time
+                    if (currentInputSeconds !== pausedTime) {
+                        this.totalSeconds = newTotalSeconds;
+                        this.remainingSeconds = this.totalSeconds;
+                        this.currentRepetition = 0;
+                    }
+                    // Otherwise just resume with current remaining time
+
+                    this.isPaused = false;
+                    this.updateDisplay();
+                    this.updatePieChart();
+                    this.closeSettings();
+                    this.start();
+                } else {
+                    // New start
+                    this.totalSeconds = newTotalSeconds;
+                    this.remainingSeconds = this.totalSeconds;
+                    this.currentRepetition = 0;
+                    this.updateDisplay();
+                    this.updatePieChart();
+                    this.closeSettings();
+                    this.start();
+                }
+            }
+
+            async start() {
+                this.isRunning = true;
+                this.timerWrapper.classList.add('running');
+
+                // Activate wake lock to prevent screen from turning off
+                await this.requestWakeLock();
+
+                // Enter fullscreen if enabled
+                await this.enterFullscreen();
+
+                this.intervalId = setInterval(() => {
+                    this.remainingSeconds--;
+                    this.updateDisplay();
+                    this.updatePieChart();
+
+                    if (this.remainingSeconds <= 0) {
+                        this.onTimerComplete();
+                    }
+                }, 1000);
+            }
+
+            async onTimerComplete() {
+                clearInterval(this.intervalId);
+                this.isRunning = false;
+                this.timerWrapper.classList.remove('running');
+
+                this.currentRepetition++;
+
+                const soundDurationMs = this.soundDuration * 1000;
+
+                // Start blinking and sound
+                this.startBlinking();
+                if (this.soundEnabled) {
+                    this.playBeepSound(soundDurationMs);
+                }
+
+                if (this.currentRepetition < this.totalRepetitions) {
+                    // Restart timer after sound
+                    setTimeout(() => {
+                        this.stopBlinking();
+                        this.remainingSeconds = this.totalSeconds;
+                        this.updateDisplay();
+                        this.updatePieChart();
+                        this.start();
+                    }, this.soundEnabled ? soundDurationMs : 0);
+                } else {
+                    // Stop blinking after sound duration if no more repetitions
+                    // Release wake lock and exit fullscreen when all cycles are complete
+                    await this.releaseWakeLock();
+                    await this.exitFullscreen();
+                    setTimeout(() => {
+                        this.stopBlinking();
+                    }, soundDurationMs);
+                }
+            }
+
+            startBlinking() {
+                let isVisible = true;
+                const centerX = 100, centerY = 100, radius = 95;
+                const top = centerY - radius;
+                const bottom = centerY + radius;
+                const fullCirclePath = `M ${centerX},${top}
+                                        A ${radius},${radius} 0 0,1 ${centerX},${bottom}
+                                        A ${radius},${radius} 0 0,1 ${centerX},${top}
+                                        Z`;
+
+                // Set initial full circle
+                this.pieSlice.setAttribute('d', fullCirclePath);
+
+                // Start visual blinking
+                this.blinkIntervalId = setInterval(() => {
+                    if (isVisible) {
+                        this.pieSlice.setAttribute('d', '');
+                    } else {
+                        this.pieSlice.setAttribute('d', fullCirclePath);
+                    }
+                    isVisible = !isVisible;
+                }, 300);
+
+                // Start countdown display
+                this.timerText.classList.add('blink-countdown');
+                let remainingBlinkSeconds = this.soundDuration;
+                this.timerText.textContent = remainingBlinkSeconds;
+
+                // Update round text during blinking
+                if (this.totalRepetitions > 1) {
+                    this.roundText.textContent = `Kolo ${this.currentRepetition} / ${this.totalRepetitions}`;
+                }
+
+                this.blinkCountdownId = setInterval(() => {
+                    remainingBlinkSeconds--;
+                    if (remainingBlinkSeconds >= 0) {
+                        this.timerText.textContent = remainingBlinkSeconds;
+                    }
+                }, 1000);
+            }
+
+            stopBlinking() {
+                if (this.blinkIntervalId) {
+                    clearInterval(this.blinkIntervalId);
+                    this.blinkIntervalId = null;
+                }
+                if (this.blinkCountdownId) {
+                    clearInterval(this.blinkCountdownId);
+                    this.blinkCountdownId = null;
+                }
+                // Stop sound
+                this.stopSound();
+                // Restore normal time display and font size
+                this.timerText.classList.remove('blink-countdown');
+                this.updateDisplay();
+            }
+
+            updateDisplay() {
+                const hours = Math.floor(this.remainingSeconds / 3600);
+                const minutes = Math.floor((this.remainingSeconds % 3600) / 60);
+                const seconds = this.remainingSeconds % 60;
+
+                const timeString = `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                this.timerText.textContent = timeString;
+
+                // Update round display
+                if (this.totalRepetitions > 1) {
+                    // Pokud už jsme prošli všechny opakování, zobrazit totalRepetitions
+                    const currentRound = this.currentRepetition >= this.totalRepetitions
+                        ? this.totalRepetitions
+                        : this.currentRepetition + 1;
+                    this.roundText.textContent = `Kolo ${currentRound} / ${this.totalRepetitions}`;
+                } else {
+                    this.roundText.textContent = '';
+                }
+            }
+
+            updatePieChart() {
+                if (this.totalSeconds === 0) {
+                    this.pieSlice.setAttribute('d', '');
+                    return;
+                }
+
+                const progress = this.remainingSeconds / this.totalSeconds; // 1.0 to 0.0
+
+                if (progress <= 0) {
+                    // Empty circle
+                    this.pieSlice.setAttribute('d', '');
+                    return;
+                }
+
+                if (progress >= 1) {
+                    // Full circle - draw as two semicircles
+                    const centerX = 100, centerY = 100, radius = 95;
+                    const top = centerY - radius;
+                    const bottom = centerY + radius;
+                    const pathData = `M ${centerX},${top}
+                                      A ${radius},${radius} 0 0,1 ${centerX},${bottom}
+                                      A ${radius},${radius} 0 0,1 ${centerX},${top}
+                                      Z`;
+                    this.pieSlice.setAttribute('d', pathData);
+                    return;
+                }
+
+                // Partial circle - decreasing counterclockwise from top (appears to shrink clockwise)
+                const angle = progress * 360; // degrees remaining
+                const centerX = 100, centerY = 100, radius = 95;
+
+                // Start at top (12 o'clock)
+                // In SVG: angle 0 is at 3 o'clock, we want to start at 12 o'clock (-90 degrees)
+                const startAngleDeg = -90;
+                const endAngleDeg = startAngleDeg - angle; // Go counterclockwise (appears to shrink from right)
+
+                const startAngleRad = startAngleDeg * Math.PI / 180;
+                const endAngleRad = endAngleDeg * Math.PI / 180;
+
+                const startX = centerX + radius * Math.cos(startAngleRad);
+                const startY = centerY + radius * Math.sin(startAngleRad);
+                const endX = centerX + radius * Math.cos(endAngleRad);
+                const endY = centerY + radius * Math.sin(endAngleRad);
+
+                const largeArc = angle > 180 ? 1 : 0;
+
+                // Sweep flag 0 = counterclockwise
+                const pathData = `M ${centerX},${centerY}
+                                  L ${startX},${startY}
+                                  A ${radius},${radius} 0 ${largeArc},0 ${endX},${endY}
+                                  Z`;
+
+                this.pieSlice.setAttribute('d', pathData);
+            }
+
+            playBeepSound(durationMs = 5000) {
+                try {
+                    // Stop any existing sound first
+                    this.stopSound();
+
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const currentTime = this.audioContext.currentTime;
+                    const beepDuration = 0.2; // 200ms per beep
+                    const pauseDuration = 0.1; // 100ms pause
+                    const cycleDuration = beepDuration + pauseDuration;
+                    const beepCount = Math.floor(durationMs / 1000 / cycleDuration);
+
+                    this.activeOscillators = [];
+
+                    for (let i = 0; i < beepCount; i++) {
+                        const startTime = currentTime + (i * cycleDuration);
+
+                        const oscillator = this.audioContext.createOscillator();
+                        const gainNode = this.audioContext.createGain();
+
+                        oscillator.connect(gainNode);
+                        gainNode.connect(this.audioContext.destination);
+
+                        oscillator.frequency.value = 1000; // 1000 Hz
+                        oscillator.type = 'sine';
+
+                        gainNode.gain.setValueAtTime(0.3, startTime);
+                        gainNode.gain.setValueAtTime(0.3, startTime + beepDuration);
+                        gainNode.gain.setValueAtTime(0, startTime + beepDuration);
+
+                        oscillator.start(startTime);
+                        oscillator.stop(startTime + beepDuration);
+
+                        this.activeOscillators.push({oscillator, gainNode});
+                    }
+                } catch (error) {
+                    console.error('Error playing sound:', error);
+                }
+            }
+
+            stopSound() {
+                if (this.activeOscillators.length > 0) {
+                    this.activeOscillators.forEach(({oscillator, gainNode}) => {
+                        try {
+                            gainNode.gain.cancelScheduledValues(this.audioContext.currentTime);
+                            gainNode.gain.setValueAtTime(0, this.audioContext.currentTime);
+                            oscillator.stop();
+                        } catch (e) {
+                            // Oscillator may already be stopped
+                        }
+                    });
+                    this.activeOscillators = [];
+                }
+                if (this.audioContext) {
+                    try {
+                        this.audioContext.close();
+                    } catch (e) {
+                        // Context may already be closed
+                    }
+                    this.audioContext = null;
+                }
+            }
+        }
+
+        // Initialize timer when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new CountdownTimer();
+        });
+    </script>
+</body>
+</html>
