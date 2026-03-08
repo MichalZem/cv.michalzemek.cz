@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="v2/styles.css?v=20260308-4">
+  <link rel="stylesheet" href="v2/styles.css?v=20260308-5">
 
 
 </head>
@@ -59,17 +59,25 @@
               <h1>AI Solution Engineer</h1>
               <p class="identity-card__title">Senior C# Developer / .NET Core / ASP.NET Core / Blazor</p>
             </div>
-            <button
-              class="identity-card__action-button"
-              id="downloadPdfButton"
-              type="button"
-              aria-label="Tisk nebo uložení do PDF"
-              title="Tisk / PDF">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path d="M7 3h10v5H7V3Zm10 18H7v-5h10v5Zm2-11a2 2 0 0 1 2 2v5h-3v-3H6v3H3v-5a2 2 0 0 1 2-2h14Zm-3 0V6H8v4h8Z" fill="currentColor" />
-              </svg>
-              <span class="sr-only">Tisk / PDF</span>
-            </button>
+            <div class="identity-card__summary-actions">
+              <a
+                class="identity-card__download-link"
+                href="v2/pdf/Michal_Zemek_AI_Solution_Engineer_Senior_CSharp_NET_Developer.pdf"
+                download="Michal_Zemek_AI_Solution_Engineer_Senior_CSharp_NET_Developer.pdf">
+                Stáhnout životopis v PDF
+              </a>
+              <button
+                class="identity-card__action-button"
+                id="printPdfButton"
+                type="button"
+                aria-label="Tisk nebo uložení do PDF"
+                title="Tisk / PDF">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M7 3h10v5H7V3Zm10 18H7v-5h10v5Zm2-11a2 2 0 0 1 2 2v5h-3v-3H6v3H3v-5a2 2 0 0 1 2-2h14Zm-3 0V6H8v4h8Z" fill="currentColor" />
+                </svg>
+                <span class="sr-only">Tisk / PDF</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -441,7 +449,7 @@
   </div>
 
 
-  <script src="v2/script.js?v=20260308-1"></script>
+  <script src="v2/script.js?v=20260308-2"></script>
 
 
     <!-- Default Statcounter code for https://cv.michalzemek.cz/ https://cv.michalzemek.cz/ -->
