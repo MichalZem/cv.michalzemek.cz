@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="v2/styles.css?v=20260307-2">
+  <link rel="stylesheet" href="v2/styles.css?v=20260308-4">
 
 
 </head>
@@ -54,8 +54,23 @@
               <p class="identity-card__contact"><a href="tel:+420777045496">+420 777 045 496</a></p>
             </div>
           </div>
-          <h1>AI Solution Engineer</h1>
-          <p class="identity-card__title">Senior C# Developer / .NET Core / ASP.NET Core / Blazor</p>
+          <div class="identity-card__summary">
+            <div class="identity-card__summary-text">
+              <h1>AI Solution Engineer</h1>
+              <p class="identity-card__title">Senior C# Developer / .NET Core / ASP.NET Core / Blazor</p>
+            </div>
+            <button
+              class="identity-card__action-button"
+              id="downloadPdfButton"
+              type="button"
+              aria-label="Tisk nebo uložení do PDF"
+              title="Tisk / PDF">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M7 3h10v5H7V3Zm10 18H7v-5h10v5Zm2-11a2 2 0 0 1 2 2v5h-3v-3H6v3H3v-5a2 2 0 0 1 2-2h14Zm-3 0V6H8v4h8Z" fill="currentColor" />
+              </svg>
+              <span class="sr-only">Tisk / PDF</span>
+            </button>
+          </div>
         </div>
 
         <nav class="site-nav" id="siteNav" aria-label="Hlavní navigace">
@@ -67,6 +82,7 @@
           <a href="#zajmy">Zájmy</a>
           <a href="#kontakt">Kontakt</a>
         </nav>
+
       </div>
     </aside>
 
@@ -216,7 +232,7 @@
         </div>
       </section>
 
-      <section class="section section--split reveal" id="kompetence">
+      <section class="section reveal" id="kompetence">
         <div class="section-heading">
           <p class="eyebrow">Profil</p>
           <h2>Klíčové kompetence</h2>
@@ -425,7 +441,7 @@
   </div>
 
 
-  <script src="v2/script.js?v=20260307-4"></script>
+  <script src="v2/script.js?v=20260308-1"></script>
 
 
     <!-- Default Statcounter code for https://cv.michalzemek.cz/ https://cv.michalzemek.cz/ -->

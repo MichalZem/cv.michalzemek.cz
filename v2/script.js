@@ -9,6 +9,7 @@ function initCvPage() {
   var revealElements = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
   var yearNode = document.getElementById("currentYear");
   var copyEmailButton = document.getElementById("copyEmailButton");
+  var downloadPdfButton = document.getElementById("downloadPdfButton");
   var mobileNavToggle = document.getElementById("mobileNavToggle");
   var siteNav = document.getElementById("siteNav");
   var avatarPreviewOpen = document.getElementById("avatarPreviewOpen");
@@ -200,6 +201,17 @@ function initCvPage() {
       if (mailtoHref) {
         window.location.href = mailtoHref;
       }
+    });
+  }
+
+  if (downloadPdfButton) {
+    downloadPdfButton.addEventListener("click", function () {
+      closeMobileNav();
+      closeAvatarLightbox();
+
+      window.setTimeout(function () {
+        window.print();
+      }, 80);
     });
   }
 

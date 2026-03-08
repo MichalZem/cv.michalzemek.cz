@@ -73,7 +73,7 @@ button,
   position: relative;
   width: 22px;
   height: 16px;
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
@@ -151,6 +151,17 @@ button,
   min-width: 0;
 }
 
+.identity-card__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.85rem 1rem;
+}
+
+.identity-card__summary-text {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
 .identity-card__avatar-button {
   appearance: none;
   border: 0;
@@ -163,9 +174,41 @@ button,
   cursor: zoom-in;
 }
 
+.identity-card__action-button {
+  appearance: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(255, 248, 241, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 248, 241, 0.88);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0;
+  justify-self: end;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.identity-card__action-button svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
 .identity-card__avatar-button:focus-visible {
   outline: 2px solid rgba(255, 248, 241, 0.92);
   outline-offset: 5px;
+}
+
+.identity-card__action-button:hover,
+.identity-card__action-button:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 248, 241, 0.28);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 .identity-card__avatar {
@@ -503,7 +546,7 @@ button,
 .pill-grid,
 .interests-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
 }
 
@@ -657,7 +700,6 @@ button,
 
 @media (max-width: 920px) {
   .section--split,
-  .pill-grid,
   .tech-columns,
   .interests-grid,
   .contact-card {
@@ -684,6 +726,226 @@ button,
 
   .image-lightbox__clone {
     border-radius: 28px;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .identity-card__action-button {
+    margin-top: 0.7rem;
+  }
+
+  .pill-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@page {
+  margin: 12mm;
+}
+
+@media print {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+    line-height: 1.4;
+  }
+
+  .mobile-nav-toggle,
+  .image-lightbox,
+  .site-nav,
+  .identity-card__action-button {
+    display: none !important;
+  }
+
+  .page-shell {
+    min-height: auto;
+  }
+
+  .sidebar {
+    position: static;
+    inset: auto;
+    width: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .sidebar__inner {
+    height: auto;
+    padding: 0 0 0.8rem;
+    color: #000;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .identity-card {
+    padding: 0 0 0.8rem;
+    border-bottom: 1px solid #000;
+  }
+
+  .identity-card__avatar-button {
+    display: inline-flex;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .identity-card__avatar {
+    width: 72px;
+    height: 72px;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .identity-card__name,
+  .identity-card__contact,
+  .identity-card h1,
+  .identity-card__title {
+    color: #000;
+  }
+
+  .identity-card h1 {
+    font-size: 20pt;
+    line-height: 1.05;
+  }
+
+  .identity-card__title {
+    font-size: 11pt;
+  }
+
+  .content {
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero,
+  .section {
+    margin: 0.45rem 0 0.7rem;
+    padding: 0;
+  }
+
+  .hero__content,
+  .section,
+  .pill-card,
+  .tech-card,
+  .detail-card,
+  .interest-card,
+  .experience-card__body,
+  .contact-card {
+    background: transparent;
+    color: #000;
+    border: 1px solid #d6d6d6;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .hero__content,
+  .section,
+  .contact-card {
+    border-radius: 0;
+  }
+
+  .hero__content {
+    padding: 0.9rem;
+  }
+
+  .hero .eyebrow,
+  .hero__headline {
+    display: none;
+  }
+
+  .section {
+    padding: 0.9rem;
+  }
+
+  .hero__content h2,
+  .section-heading h2 {
+    font-size: 18pt;
+  }
+
+  .hero__headline-main {
+    font-size: 24pt;
+  }
+
+  .hero__headline-sub,
+  .hero__lead,
+  .pill-card p,
+  .interest-card p,
+  .tech-card li,
+  .detail-card p,
+  .experience-card__role,
+  .eyebrow,
+  .stat-card__label,
+  .contact-card__label,
+  .site-footer {
+    color: #444;
+  }
+
+  .experience-card {
+    grid-template-columns: 150px minmax(0, 1fr);
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .experience-card__meta {
+    position: static;
+    top: auto;
+    padding: 0.3rem 0 0;
+    color: #000;
+  }
+
+  .section-heading,
+  .experience-card,
+  .pill-card,
+  .tech-card,
+  .detail-card,
+  .interest-card,
+  .contact-card,
+  .subproject {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .section-heading {
+    margin-bottom: 0.8rem;
+  }
+
+  .section--split,
+  .pill-grid,
+  .tech-columns,
+  .interests-grid,
+  .contact-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tag-row span {
+    background: transparent;
+    color: #000;
+    border: 1px solid #bdbdbd;
+  }
+
+  .contact-card .contact-card__label,
+  .contact-card a,
+  .link-button,
+  .site-footer {
+    color: #000;
+  }
+
+  .contact-links a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8.5pt;
+    font-weight: 400;
   }
 
   .reveal {
