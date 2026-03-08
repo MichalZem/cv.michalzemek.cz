@@ -534,6 +534,10 @@ button,
   padding: 1.5rem;
 }
 
+.contact-card .contact-card__label {
+  color: rgba(255, 248, 241, 0.68);
+}
+
 .contact-card a,
 .link-button {
   color: #fff;
