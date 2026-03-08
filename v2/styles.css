@@ -574,10 +574,23 @@ button,
 }
 
 @media (max-width: 1180px) {
+  body.is-mobile-nav-open {
+    overflow: hidden;
+  }
+
+  body.is-mobile-nav-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgba(18, 13, 10, 0.18);
+  }
+
   .sidebar {
     position: relative;
     inset: auto;
     width: auto;
+    z-index: auto;
     min-height: auto;
     background: transparent;
     border-right: 0;
@@ -613,7 +626,19 @@ button,
 
   .site-nav.is-open {
     display: grid;
-    padding-top: 1.2rem;
+    position: fixed;
+    top: calc(1rem + 58px + 0.8rem);
+    left: 1rem;
+    right: 1rem;
+    z-index: 45;
+    gap: 0.2rem;
+    padding: 0.9rem;
+    max-height: calc(100dvh - 5.8rem);
+    overflow-y: auto;
+    border-radius: 26px;
+    border: 1px solid rgba(255, 248, 241, 0.1);
+    background: linear-gradient(180deg, rgba(35, 26, 20, 0.985), rgba(63, 40, 29, 0.96));
+    box-shadow: 0 26px 64px rgba(18, 13, 10, 0.28);
   }
 
   .experience-card {
@@ -655,6 +680,12 @@ button,
 
   .image-lightbox__clone {
     border-radius: 28px;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 

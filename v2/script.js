@@ -30,6 +30,30 @@ function initCvPage() {
   var lastFocusedElement = null;
   var activeAvatarClone = null;
 
+  function closeMobileNav() {
+    if (siteNav) {
+      siteNav.classList.remove("is-open");
+    }
+
+    if (mobileNavToggle) {
+      mobileNavToggle.setAttribute("aria-expanded", "false");
+    }
+
+    document.body.classList.remove("is-mobile-nav-open");
+  }
+
+  function openMobileNav() {
+    if (siteNav) {
+      siteNav.classList.add("is-open");
+    }
+
+    if (mobileNavToggle) {
+      mobileNavToggle.setAttribute("aria-expanded", "true");
+    }
+
+    document.body.classList.add("is-mobile-nav-open");
+  }
+
   function decodeEmailPart(attributeName) {
     var rawValue = copyEmailButton ? copyEmailButton.getAttribute(attributeName) : "";
 
@@ -139,13 +163,7 @@ function initCvPage() {
         setActiveLink(targetId);
       }
 
-      if (siteNav) {
-        siteNav.classList.remove("is-open");
-      }
-
-      if (mobileNavToggle) {
-        mobileNavToggle.setAttribute("aria-expanded", "false");
-      }
+      closeMobileNav();
     });
   });
 
@@ -187,8 +205,26 @@ function initCvPage() {
 
   if (mobileNavToggle && siteNav) {
     mobileNavToggle.addEventListener("click", function () {
-      var isOpen = siteNav.classList.toggle("is-open");
-      mobileNavToggle.setAttribute("aria-expanded", String(isOpen));
+      var isOpen = siteNav.classList.contains("is-open");
+
+      if (isOpen) {
+        closeMobileNav();
+        return;
+      }
+
+      openMobileNav();
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!siteNav.classList.contains("is-open")) {
+        return;
+      }
+
+      if (siteNav.contains(event.target) || mobileNavToggle.contains(event.target)) {
+        return;
+      }
+
+      closeMobileNav();
     });
   }
 
@@ -372,16 +408,23 @@ function initCvPage() {
     if (avatarLightboxBackdrop) {
       avatarLightboxBackdrop.addEventListener("click", closeAvatarLightbox);
     }
-
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        closeAvatarLightbox();
-      }
-    });
   }
 
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      closeMobileNav();
+      closeAvatarLightbox();
+    }
+  });
+
   window.addEventListener("scroll", updateActiveLink, { passive: true });
-  window.addEventListener("resize", updateActiveLink);
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 1180) {
+      closeMobileNav();
+    }
+
+    updateActiveLink();
+  });
   updateActiveLink();
 }
 
