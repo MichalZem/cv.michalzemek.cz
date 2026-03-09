@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="v2/styles.css?v=20260309-2">
+  <link rel="stylesheet" href="v2/styles.css?v=20260309-9">
 
 
 </head>
@@ -52,6 +52,17 @@
             <div class="identity-card__person">
               <p class="identity-card__name">Michal Zemek</p>
               <p class="identity-card__contact"><a href="tel:+420777045496">+420 777 045 496</a></p>
+              <p class="identity-card__contact identity-card__contact--email">
+                <a
+                  class="identity-card__email js-email-link"
+                  href="#kontakt"
+                  data-email-user="77,105,99,104,97,108"
+                  data-email-domain="90,101,109,101,107"
+                  data-email-tld="99,122"
+                  rel="nofollow">
+                  Zobrazit e-mail
+                </a>
+              </p>
             </div>
           </div>
           <div class="identity-card__summary">
@@ -307,7 +318,7 @@
             <h3>AI a knowledge systems</h3>
             <ul>
               <li>RAG, LLM integrace, prompt management</li>
-              <li>Search, transcription, MCP</li>
+              <li>Search, transcription, MCP, Azure AI Foundry</li>
               <li>OpenAI, Anthropic</li>
             </ul>
           </article>
@@ -374,7 +385,7 @@
           </article>
           <article class="interest-card reveal">
             <h3>Předseda bytového družstva</h3>
-            <p>Zkušenost s vedením nekompatibilního týmu a praktickým rozhodováním v reálném provozu.</p>
+            <p>Zkušenost s vedením nesourodového týmu a praktickým rozhodováním v reálném provozu.</p>
           </article>
           <article class="interest-card reveal">
             <h3>Žonglování</h3>
@@ -401,8 +412,7 @@
           <div>
             <p class="contact-card__label">E-mail</p>
             <a
-              class="link-button link-button--email"
-              id="copyEmailButton"
+              class="link-button link-button--email js-email-link"
               href="#kontakt"
               data-email-user="77,105,99,104,97,108"
               data-email-domain="90,101,109,101,107"
@@ -455,7 +465,7 @@
   </div>
 
 
-  <script src="v2/script.js?v=20260309-1"></script>
+  <script src="v2/script.js?v=20260309-2"></script>
 
 
     <!-- Default Statcounter code for https://cv.michalzemek.cz/ https://cv.michalzemek.cz/ -->

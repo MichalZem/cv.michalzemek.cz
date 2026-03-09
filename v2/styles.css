@@ -274,6 +274,20 @@ button,
   font-weight: 500;
 }
 
+.identity-card__contact--email {
+  margin-top: 0.18rem;
+}
+
+.identity-card__email {
+  color: rgba(255, 248, 241, 0.78);
+  transition: color 180ms ease, opacity 180ms ease;
+}
+
+.identity-card__email:hover,
+.identity-card__email:focus-visible {
+  color: #fff;
+}
+
 .identity-card h1 {
   margin: 0 0 0.55rem;
   font: 600 clamp(1.75rem, 2.9vw, 1.75rem)/0.98 "IBM Plex Serif", serif;
@@ -778,7 +792,8 @@ button,
 }
 
 @page {
-  margin: 12mm;
+  size: A4;
+  margin: 8mm;
 }
 
 @media print {
@@ -789,7 +804,8 @@ button,
   body {
     background: #fff;
     color: #000;
-    line-height: 1.4;
+    font-size: 9.4pt;
+    line-height: 1.28;
   }
 
   .mobile-nav-toggle,
@@ -816,7 +832,7 @@ button,
 
   .sidebar__inner {
     height: auto;
-    padding: 0 0 0.8rem;
+    padding: 0 0 0.45rem;
     color: #000;
     background: transparent;
     box-shadow: none;
@@ -824,7 +840,7 @@ button,
   }
 
   .identity-card {
-    padding: 0 0 0.8rem;
+    padding: 0 0 0.45rem;
     border-bottom: 1px solid #000;
   }
 
@@ -835,8 +851,8 @@ button,
   }
 
   .identity-card__avatar {
-    width: 72px;
-    height: 72px;
+    width: 56px;
+    height: 56px;
     box-shadow: none;
     background: transparent;
   }
@@ -849,12 +865,30 @@ button,
   }
 
   .identity-card h1 {
-    font-size: 20pt;
-    line-height: 1.05;
+    margin: 0 0 0.2rem;
+    font-size: 16pt;
+    line-height: 1;
   }
 
   .identity-card__title {
-    font-size: 11pt;
+    font-size: 9.5pt;
+  }
+
+  .identity-card__name {
+    font-size: 14pt;
+  }
+
+  .identity-card__contact {
+    margin-top: 0.2rem;
+    font-size: 9.5pt;
+  }
+
+  .identity-card__contact--email {
+    margin-top: 0.08rem;
+  }
+
+  .identity-card__email {
+    color: #000;
   }
 
   .content {
@@ -862,9 +896,13 @@ button,
     padding: 0;
   }
 
+  .contact-section {
+    display: none !important;
+  }
+
   .hero,
   .section {
-    margin: 0.45rem 0 0.7rem;
+    margin: 0.2rem 0 0.38rem;
     padding: 0;
   }
 
@@ -890,7 +928,7 @@ button,
   }
 
   .hero__content {
-    padding: 0.9rem;
+    padding: 0.6rem 0.7rem;
   }
 
   .hero .eyebrow,
@@ -899,16 +937,24 @@ button,
   }
 
   .section {
-    padding: 0.9rem;
+    padding: 0.6rem 0.7rem;
   }
 
   .hero__content h2,
   .section-heading h2 {
-    font-size: 18pt;
+    margin: 0.08rem 0 0.25rem;
+    font-size: 14pt;
   }
 
   .hero__headline-main {
     font-size: 24pt;
+  }
+
+  .hero__lead {
+    margin: 0 0 0.42rem;
+    max-width: none;
+    font: inherit;
+    letter-spacing: normal;
   }
 
   .hero__headline-sub,
@@ -925,14 +971,40 @@ button,
     color: #444;
   }
 
+  .timeline,
+  .pill-grid,
+  .tech-columns,
+  .interests-grid,
+  .section--split,
+  .contact-card {
+    gap: 0.55rem;
+  }
+
+  .experience-card__body,
+  .pill-card,
+  .tech-card,
+  .detail-card,
+  .interest-card,
+  .contact-card {
+    padding: 0.7rem;
+  }
+
   .experience-card {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
   .experience-card__meta {
-    margin: 0 0 0.3rem;
+    margin: 0 0 0.22rem;
     color: #000;
+    font-size: 8.4pt;
+    gap: 0.32rem;
+  }
+
+  .experience-card__meta::before {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex-basis: 0.75rem;
   }
 
   .section-heading,
@@ -948,21 +1020,60 @@ button,
   }
 
   .section-heading {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.45rem;
   }
 
-  .section--split,
-  .pill-grid,
-  .tech-columns,
-  .interests-grid,
-  .contact-card {
+  .section--split {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pill-grid,
+  .tech-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .experience-card__role {
+    margin: 0 0 0.45rem;
+    font-size: 8.9pt;
+  }
+
+  .experience-card__body h3,
+  .pill-card h3,
+  .tech-card h3,
+  .interest-card h3,
+  .detail-card h3 {
+    margin-bottom: 0.2rem;
+    line-height: 1.15;
+  }
+
+  .experience-card__body ul,
+  .tech-card ul,
+  .detail-list {
+    padding-left: 1rem;
+  }
+
+  .subproject + .subproject {
+    margin-top: 0.65rem;
+  }
+
+  .tag-row {
+    display: block;
+    margin: 0.45rem 0 0;
+    line-height: 1.2;
   }
 
   .tag-row span {
     background: transparent;
     color: #000;
-    border: 1px solid #bdbdbd;
+    border: 0;
+    padding: 0;
+    font-size: 8pt;
+    font-weight: 500;
+    border-radius: 0;
+  }
+
+  .tag-row span + span::before {
+    content: " | ";
   }
 
   .contact-card .contact-card__label,
@@ -972,10 +1083,192 @@ button,
     color: #000;
   }
 
+  .contact-links {
+    gap: 0.4rem;
+  }
+
+  #kompetence,
+  #vzdelani,
+  #technologie,
+  #zajmy {
+    padding: 0.45rem 0.55rem;
+  }
+
+  #kompetence .section-heading,
+  #vzdelani .section-heading,
+  #technologie .section-heading,
+  #zajmy .section-heading {
+    margin-bottom: 0.22rem;
+  }
+
+  #kompetence .section-heading .eyebrow,
+  #vzdelani .section-heading .eyebrow,
+  #technologie .section-heading .eyebrow,
+  #zajmy .section-heading .eyebrow {
+    display: none;
+  }
+
+  #kompetence .section-heading h2,
+  #vzdelani .section-heading h2,
+  #technologie .section-heading h2,
+  #zajmy .section-heading h2 {
+    margin: 0;
+    font-size: 11pt;
+  }
+
+  #kompetence .pill-grid,
+  #technologie .tech-columns,
+  #zajmy .interests-grid {
+    display: block;
+    column-count: 2;
+    column-gap: 0.9rem;
+  }
+
+  #kompetence .pill-card,
+  #technologie .tech-card,
+  #zajmy .interest-card {
+    margin: 0 0 0.18rem;
+    padding: 0;
+    border: 0;
+    break-inside: avoid-column;
+    page-break-inside: avoid;
+  }
+
+  #kompetence .pill-card::before,
+  #zajmy .interest-card::before {
+    content: "• ";
+    font-weight: 700;
+  }
+
+  #kompetence .pill-card h3,
+  #zajmy .interest-card h3 {
+    display: inline;
+    margin: 0;
+    font-size: 8.6pt;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  #kompetence .pill-card p,
+  #zajmy .interest-card p {
+    display: none;
+  }
+
+  #zajmy .interest-card p {
+    display: inline;
+    font-size: 8.2pt;
+    line-height: 1.2;
+    color: #000;
+  }
+
+  #zajmy .interest-card h3::after {
+    content: " - ";
+  }
+
+  #technologie .tech-card h3 {
+    display: inline;
+    margin: 0;
+    font-size: 8.6pt;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  #technologie .tech-card h3::before {
+    content: "• ";
+  }
+
+  #technologie .tech-card h3::after {
+    content: ": ";
+  }
+
+  #technologie .tech-card ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #technologie .tech-card li {
+    display: inline;
+    font-size: 8.2pt;
+    line-height: 1.2;
+  }
+
+  #technologie .tech-card li + li::before {
+    content: ", ";
+  }
+
+  #vzdelani {
+    column-gap: 0.9rem;
+    align-items: start;
+  }
+
+  #vzdelani > div {
+    break-inside: avoid-column;
+    page-break-inside: avoid;
+  }
+
+  #vzdelani .detail-card {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    break-inside: avoid-column;
+    page-break-inside: avoid;
+  }
+
+  #vzdelani .detail-card h3 {
+    display: inline;
+    margin: 0;
+    font-size: 8.6pt;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  #vzdelani .detail-card h3::after {
+    content: " - ";
+  }
+
+  #vzdelani .detail-card p,
+  #vzdelani .detail-card span {
+    display: inline;
+    font-size: 8.2pt;
+    line-height: 1.2;
+    color: #000;
+  }
+
+  #vzdelani .detail-card p::after {
+    content: " | ";
+  }
+
+  #vzdelani .detail-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  #vzdelani .detail-list li {
+    display: inline;
+    font-size: 8.2pt;
+    line-height: 1.2;
+  }
+
+  #vzdelani .detail-list li::before {
+    content: "• ";
+    font-weight: 700;
+  }
+
+  #vzdelani .detail-list li + li {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.12rem;
+  }
+
   .contact-links a[href^="http"]::after {
-    content: " (" attr(href) ")";
-    font-size: 8.5pt;
-    font-weight: 400;
+    content: "";
+  }
+
+  .site-footer {
+    display: none;
   }
 
   .reveal {

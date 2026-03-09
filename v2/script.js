@@ -8,7 +8,7 @@ function initCvPage() {
 
   var revealElements = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
   var yearNode = document.getElementById("currentYear");
-  var copyEmailButton = document.getElementById("copyEmailButton");
+  var emailLinks = Array.prototype.slice.call(document.querySelectorAll(".js-email-link"));
   var mobileNavToggle = document.getElementById("mobileNavToggle");
   var siteNav = document.getElementById("siteNav");
   var avatarPreviewOpen = document.getElementById("avatarPreviewOpen");
@@ -54,8 +54,8 @@ function initCvPage() {
     document.body.classList.add("is-mobile-nav-open");
   }
 
-  function decodeEmailPart(attributeName) {
-    var rawValue = copyEmailButton ? copyEmailButton.getAttribute(attributeName) : "";
+  function decodeEmailPart(node, attributeName) {
+    var rawValue = node ? node.getAttribute(attributeName) : "";
 
     if (!rawValue) {
       return "";
@@ -69,10 +69,10 @@ function initCvPage() {
       .join("");
   }
 
-  function buildEmailAddress() {
-    var user = decodeEmailPart("data-email-user");
-    var domain = decodeEmailPart("data-email-domain");
-    var tld = decodeEmailPart("data-email-tld");
+  function buildEmailAddress(node) {
+    var user = decodeEmailPart(node, "data-email-user");
+    var domain = decodeEmailPart(node, "data-email-domain");
+    var tld = decodeEmailPart(node, "data-email-tld");
 
     if (!user || !domain || !tld) {
       return "";
@@ -85,16 +85,20 @@ function initCvPage() {
     yearNode.textContent = "© " + new Date().getFullYear() + " Michal Zemek";
   }
 
-  if (copyEmailButton) {
-    var decodedEmail = buildEmailAddress();
+  if (emailLinks.length) {
+    emailLinks.forEach(function (emailLink) {
+      var decodedEmail = buildEmailAddress(emailLink);
 
-    if (decodedEmail) {
-      copyEmailButton.textContent = decodedEmail;
-      copyEmailButton.setAttribute("href", "mailto:" + decodedEmail);
-      copyEmailButton.setAttribute("data-email", decodedEmail);
-      copyEmailButton.setAttribute("aria-label", "Napsat e-mail na " + decodedEmail);
-      copyEmailButton.setAttribute("title", decodedEmail);
-    }
+      if (!decodedEmail) {
+        return;
+      }
+
+      emailLink.textContent = decodedEmail;
+      emailLink.setAttribute("href", "mailto:" + decodedEmail);
+      emailLink.setAttribute("data-email", decodedEmail);
+      emailLink.setAttribute("aria-label", "Napsat e-mail na " + decodedEmail);
+      emailLink.setAttribute("title", decodedEmail);
+    });
   }
 
   if ("IntersectionObserver" in window) {
@@ -167,39 +171,41 @@ function initCvPage() {
     });
   });
 
-  if (copyEmailButton) {
-    copyEmailButton.addEventListener("click", function (event) {
-      var email = copyEmailButton.getAttribute("data-email");
-      var mailtoHref = copyEmailButton.getAttribute("href") || (email ? "mailto:" + email : "");
+  if (emailLinks.length) {
+    emailLinks.forEach(function (emailLink) {
+      emailLink.addEventListener("click", function (event) {
+        var email = emailLink.getAttribute("data-email");
+        var mailtoHref = emailLink.getAttribute("href") || (email ? "mailto:" + email : "");
 
-      if (!email) {
-        return;
-      }
+        if (!email) {
+          return;
+        }
 
-      if (navigator.clipboard && typeof navigator.clipboard.writeText === "function" && window.isSecureContext) {
-        event.preventDefault();
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === "function" && window.isSecureContext) {
+          event.preventDefault();
 
-        navigator.clipboard.writeText(email)
-          .then(function () {
-            var originalText = copyEmailButton.textContent;
-            copyEmailButton.textContent = "E-mail zkopírován";
+          navigator.clipboard.writeText(email)
+            .then(function () {
+              var originalText = emailLink.textContent;
+              emailLink.textContent = "E-mail zkopírován";
 
-            window.setTimeout(function () {
-              copyEmailButton.textContent = originalText;
-            }, 1600);
-          })
-          .catch(function () {
-            if (mailtoHref) {
-              window.location.href = mailtoHref;
-            }
-          });
+              window.setTimeout(function () {
+                emailLink.textContent = originalText;
+              }, 1600);
+            })
+            .catch(function () {
+              if (mailtoHref) {
+                window.location.href = mailtoHref;
+              }
+            });
 
-        return;
-      }
+          return;
+        }
 
-      if (mailtoHref) {
-        window.location.href = mailtoHref;
-      }
+        if (mailtoHref) {
+          window.location.href = mailtoHref;
+        }
+      });
     });
   }
 
