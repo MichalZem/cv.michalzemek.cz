@@ -274,6 +274,19 @@ button,
   color: #fff;
 }
 
+.identity-card__action-button--github {
+  border-color: rgba(180, 180, 180, 0.42);
+  background: rgba(130, 130, 130, 0.18);
+  color: rgba(224, 238, 255, 0.96);
+}
+
+.identity-card__action-button--github:hover,
+.identity-card__action-button--github:focus-visible {
+  background: rgba(160, 160, 160, 0.3);
+  border-color: rgba(210, 210, 210, 0.72);
+  color: #fff;
+}
+
 .identity-card__avatar {
   width: 92px;
   height: 92px;
