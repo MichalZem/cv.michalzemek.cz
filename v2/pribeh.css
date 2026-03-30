@@ -33,6 +33,52 @@
   margin: 0;
 }
 
+/* --- Journey rail (Three.js canvas) --- */
+
+.story__body {
+  position: relative;
+}
+
+.journey-rail {
+  position: absolute;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+  width: 220px;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.journey-rail__canvas {
+  position: sticky;
+  top: 0;
+  display: block;
+}
+
+.journey-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 42;
+}
+
+.has-journey .story-chapter {
+  padding-left: 140px;
+}
+
+.has-journey .story-chapter::before {
+  display: none;
+}
+
+.has-journey .story-chapter__marker::before {
+  display: none;
+}
+
+.has-journey .story-chapter__marker {
+  padding-left: 0;
+}
+
 /* --- Chapters --- */
 
 .story-chapter {

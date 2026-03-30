@@ -26,6 +26,7 @@ function initCvPage() {
   var prefersReducedMotion = typeof window.matchMedia === "function"
     ? window.matchMedia("(prefers-reduced-motion: reduce)")
     : { matches: false };
+  var isStoryPage = document.body.hasAttribute("data-page");
 
   var lastFocusedElement = null;
   var activeAvatarClone = null;
@@ -158,13 +159,49 @@ function initCvPage() {
     setActiveLink(activeSection.id);
   }
 
+  function scrollToStorySection(targetSection, href) {
+    if (!targetSection) {
+      return;
+    }
+
+    var alignedTop = window.storyJourney &&
+      typeof window.storyJourney.getAlignedScrollTopForSection === "function"
+      ? window.storyJourney.getAlignedScrollTopForSection(targetSection)
+      : null;
+
+    if (typeof alignedTop === "number" && !Number.isNaN(alignedTop)) {
+      window.scrollTo({
+        top: alignedTop,
+        behavior: prefersReducedMotion.matches ? "auto" : "smooth"
+      });
+    } else {
+      targetSection.scrollIntoView({
+        block: "start",
+        behavior: prefersReducedMotion.matches ? "auto" : "smooth"
+      });
+    }
+
+    if (window.history && typeof window.history.pushState === "function") {
+      window.history.pushState(null, "", href);
+    } else {
+      window.location.hash = targetSection.id;
+    }
+  }
+
   navLinks.forEach(function (link) {
-    link.addEventListener("click", function () {
+    link.addEventListener("click", function (event) {
       var href = link.getAttribute("href") || "";
       var targetId = href.replace("#", "");
+      var isStoryAnchor = isStoryPage && href.charAt(0) === "#";
+      var targetSection = targetId ? document.getElementById(targetId) : null;
 
       if (targetId) {
         setActiveLink(targetId);
+      }
+
+      if (isStoryAnchor && targetSection) {
+        event.preventDefault();
+        scrollToStorySection(targetSection, href);
       }
 
       closeMobileNav();
@@ -422,8 +459,6 @@ function initCvPage() {
       closeAvatarLightbox();
     }
   });
-
-  var isStoryPage = document.body.hasAttribute("data-page");
 
   if (!isStoryPage) {
     window.addEventListener("scroll", updateActiveLink, { passive: true });
