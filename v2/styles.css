@@ -366,6 +366,19 @@ button,
   font-size: 1.08rem;
 }
 
+.site-nav a[data-story-link] {
+  margin-top: 0.5rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(255, 248, 241, 0.1);
+  font-size: 0.96rem;
+  opacity: 0.82;
+}
+
+.site-nav a[data-story-link]:hover,
+.site-nav a[data-story-link]:focus-visible {
+  opacity: 1;
+}
+
 .site-nav a:hover,
 .site-nav a:focus-visible,
 .site-nav a.is-active {

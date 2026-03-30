@@ -423,15 +423,25 @@ function initCvPage() {
     }
   });
 
-  window.addEventListener("scroll", updateActiveLink, { passive: true });
-  window.addEventListener("resize", function () {
-    if (window.innerWidth > 1180) {
-      closeMobileNav();
-    }
+  var isStoryPage = document.body.hasAttribute("data-page");
 
+  if (!isStoryPage) {
+    window.addEventListener("scroll", updateActiveLink, { passive: true });
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 1180) {
+        closeMobileNav();
+      }
+
+      updateActiveLink();
+    });
     updateActiveLink();
-  });
-  updateActiveLink();
+  } else {
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 1180) {
+        closeMobileNav();
+      }
+    });
+  }
 }
 
 if (document.readyState === "loading") {
