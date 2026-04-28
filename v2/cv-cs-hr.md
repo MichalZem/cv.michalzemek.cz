@@ -1,6 +1,6 @@
 # Michal Zemek
 
-**AI Solution Engineer / Senior C# Developer / .NET / ASP.NET Core / Blazor**
+**C# / .NET Core / ASP.NET Core Developer**
 
 Benešov u Prahy  
 tel.: +420 777 045 496  
@@ -24,7 +24,7 @@ Stavím business a AI řešení nad Microsoft stackem v C#, .NET, ASP.NET Core a
 ## Pracovní zkušenosti
 
 ### Mindtra
-**AI Solution Engineer / Senior C# Developer**  
+**C# / .NET Core / ASP.NET Core Developer**  
 **duben 2025 - současnost**
 
 - Návrh a vývoj multi-tenant AI SaaS platformy na .NET a Blazoru.

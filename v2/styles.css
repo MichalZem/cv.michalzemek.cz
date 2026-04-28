@@ -341,8 +341,8 @@ button,
 
 .identity-card h1 {
   margin: 0 0 0.55rem;
-  font: 600 clamp(1.75rem, 2.9vw, 1.75rem)/0.98 "IBM Plex Serif", serif;
-  letter-spacing: -0.03em;
+  font: 600 clamp(1.15rem, 1.8vw, 1.3rem)/1.1 "IBM Plex Serif", serif;
+  letter-spacing: -0.02em;
 }
 
 .identity-card__title {
@@ -960,10 +960,6 @@ button,
     padding: 0;
   }
 
-  .contact-section {
-    display: none !important;
-  }
-
   .hero,
   .section {
     margin: 0.2rem 0 0.38rem;
@@ -989,6 +985,10 @@ button,
   .section,
   .contact-card {
     border-radius: 0;
+  }
+
+  .contact-card {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .hero__content {
