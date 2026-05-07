@@ -132,7 +132,8 @@ button,
   display: flex;
   flex-direction: column;
   box-shadow: none;
-  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .identity-card {
