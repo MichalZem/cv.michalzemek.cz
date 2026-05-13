@@ -737,6 +737,12 @@ button,
   transform: translateY(0);
 }
 
+html.no-js .reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
 @media (max-width: 1180px) {
   body.is-mobile-nav-open {
     overflow: hidden;
@@ -862,6 +868,10 @@ button,
   margin: 8mm;
 }
 
+.print-url {
+  display: none;
+}
+
 @media print {
   html {
     scroll-behavior: auto;
@@ -872,6 +882,18 @@ button,
     color: #000;
     font-size: 9.4pt;
     line-height: 1.28;
+  }
+
+  .print-url {
+    display: block;
+    position: fixed;
+    top: 0.4cm;
+    right: 0.6cm;
+    font-size: 9pt;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: 0.02em;
+    z-index: 9999;
   }
 
   .mobile-nav-toggle,

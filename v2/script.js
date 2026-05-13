@@ -102,6 +102,22 @@ function initCvPage() {
     });
   }
 
+  function isInOrAboveViewport(el) {
+    var rect = el.getBoundingClientRect();
+    if (rect.bottom <= 0) {
+      return true;
+    }
+    return rect.top < (window.innerHeight || document.documentElement.clientHeight) && rect.bottom > 0;
+  }
+
+  function revealVisibleElements() {
+    revealElements.forEach(function (element) {
+      if (!element.classList.contains("is-visible") && isInOrAboveViewport(element)) {
+        element.classList.add("is-visible");
+      }
+    });
+  }
+
   if ("IntersectionObserver" in window) {
     var sectionObserver = new IntersectionObserver(
       function (entries) {
@@ -112,14 +128,17 @@ function initCvPage() {
         });
       },
       {
-        threshold: 0.18,
-        rootMargin: "0px 0px -10% 0px"
+        threshold: 0.01,
+        rootMargin: "0px"
       }
     );
 
     revealElements.forEach(function (element) {
       sectionObserver.observe(element);
     });
+
+    window.addEventListener("load", revealVisibleElements);
+    window.setTimeout(revealVisibleElements, 600);
   } else {
     revealElements.forEach(function (element) {
       element.classList.add("is-visible");
